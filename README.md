@@ -1,73 +1,49 @@
-# React + TypeScript + Vite
+# Phonix
+Phonix is a gaming accessibility tool geared towards individuals with motor function disabilities, enabling everyone to play games with their voice, using standard controllre or keyboard inputs.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Introduction
 
-Currently, two official plugins are available:
+Many people with physical disabilities are excluded from playing video games because traditional controllers and keyboards require fine motor skills. This project addresses accessibility by enabling players to control games using only their voice. By providing an alternative input method, the project helps ensure that gaming becomes more inclusive and enjoyable for everyone. 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Objectives
 
-## React Compiler
+    Design a user-friendly interface that enables users with motor function disabilities to control games using their voice.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+    Develop a real-time speech-to-input converter for low-latency and accessible gaming experiences
 
-## Expanding the ESLint configuration
+    Provide customizable input options to accommodate a range of physical abilities and preferences
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+    Promote inclusion by expanding access to video games for users with restricted motor functions
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+# Scope
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+We will enable users to create custom voice commands (for example, binding “uppercut” to inputs left, right, up, B) and manage multiple command profiles for different games. The project will include a front-end for selecting and editing profiles, a database to store them, and a working input emulator. It will be run from a single command-line prompt or executable. As a stretch goal, we aim to support homonyms for better accent handling. All features are scoped to be achievable within the timeline of this course.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+# Proposed Solution
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The proposed solution is a Python-based desktop application with a Electron front end and a voice recognition backend. At a high level, the app listens for predefined spoken commands, translates them into text, matches them against a user-defined mapping, and sends the corresponding keyboard or controller input to the active game. The target users are PC gamers who want an accessible, hands-free method to control game actions. 
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+# Technology Stack
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+    Frontend: Electron ( electronjs.org )
+
+    Backend: Python
+
+    Database: PostgreSQL
+
+    Deployment Platform: Windows
+
+    Speech-To-Text Model: Fork from RealtimeSTT ( https://github.com/mdv314/RealtimeSTT_faster )
+
+# Expected Outcomes
+
+ The final deliverable will be a working prototype of Phonix with the following capabilities:
+
+    Enables users to play PC games through voice commands. 
+
+    Customizable command mappings stored in a database. 
+
+    Demonstrated testing results showing successful voice-to-action conversion. 
+
+    Increased accessibility for users who cannot use conventional input devices. 
+
