@@ -8,7 +8,7 @@ function App() {
   return (
     <>
       <div>
-          <img src={PhonixSquareLogo} className="logo react" alt="React logo" />
+          <img src={PhonixSquareLogo} className="logo phonix" alt="Phonix logo" />
       </div>
       <h1></h1>
       <div className="card">
