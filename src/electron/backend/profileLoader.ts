@@ -12,14 +12,7 @@ export function loadProfileMappings() {
   const raw = fs.readFileSync(filePath, "utf-8");
   const json = JSON.parse(raw);
 
-  // You can define the schema however you want.
-  // Example schema:
-  // {
-  //   "mappings": [
-  //     { "phrase": "jump", "action": "SPACE" },
-  //     { "phrase": "jump forward", "action": "W, W, SPACE" }
-  //   ]
-  // }
+  // parse into the map below VVVV
 
   const map: Record<string, string> = {};
 

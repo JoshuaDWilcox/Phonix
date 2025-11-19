@@ -3,6 +3,7 @@ import path from "path";
 import { AppState } from "./state.js";
 import { handleWord } from "./parser.js";
 
+
 let child: ChildProcess | null = null;
 let buffer = "";
 
@@ -13,9 +14,8 @@ export function startSpeechFromPython() {
     }
 
     const scriptPath = path.join(
-    __dirname,
-    "..",
-    "..",
+    process.cwd(),
+    "src",
     "python",
     "speech_stub.py" // temporary python file, will be replaced with speech to text AI parser in future sprints. just here for architecture right now
     );

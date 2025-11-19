@@ -15,6 +15,7 @@
   },
   "include": [
     "main.ts", // Explicitly include main
-    "util.ts"  // Explicitly include its dependencies
+    "util.ts", // Explicitly include its dependencies
+    "./backend/**/*.ts"
   ]
 }

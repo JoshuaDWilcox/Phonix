@@ -4,6 +4,7 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import { isDev } from "./util.js";
 import { registerBackend } from "./backend/index.js"; //new
+import { AppState } from "./backend/state.js";
 
 // Recreate __dirname for ESM (your project is ESM)
 const __filename = fileURLToPath(import.meta.url);
@@ -18,46 +19,20 @@ function createWindow() {
         }
     });
 
-<<<<<<< HEAD
-//new
-function createMainWindow() {
-    const mainWindow = new BrowserWindow({
-        width: 900,
-        height: 700,
-        webPreferences: {
-
-        },
-    });
-
-    if (isDev()) {
-        mainWindow.loadURL("http://localhost:5123");
-    } else {
-        mainWindow.loadFile(
-            path.join(app.getAppPath(), "/dist-react/index.html")
-        );
-    }
-
-    registerBackend(mainWindow);
-}
-
-app.on("ready", () => {
-    const mainWindow = new BrowserWindow({});
-=======
->>>>>>> 02000b6 (BB-21: Profiles Dropdown Added)
     if (isDev()) {
         mainWindow.loadURL("http://localhost:5123");
     } else {
         mainWindow.loadFile(path.join(app.getAppPath(), "dist-react/index.html"));
     }
-<<<<<<< HEAD
-    createMainWindow();
-});
-=======
+
+    registerBackend(mainWindow);
 }
 
 // IPC handler: read filenames from src/profiles
 ipcMain.handle("get-profiles", async () => {
-    const profilesDir = path.join(app.getAppPath(), "src/profiles");
+    const profilesDir = isDev()
+        ? path.join(process.cwd(), "src", "profiles")
+        : path.join(app.getAppPath(), "src/profiles");
 
     try {
         return fs.readdirSync(profilesDir);
@@ -67,5 +42,16 @@ ipcMain.handle("get-profiles", async () => {
     }
 });
 
+ipcMain.handle("setProfilePath", (_, filename: string) => {
+    const fullPath = isDev()
+        ? path.join(process.cwd(), "src", "profiles", filename)
+        : path.join(app.getAppPath(), "src", "profiles", filename);
+
+    console.log("[Backend] Profile selected:", fullPath);
+
+    AppState.profileFilePath = fullPath;
+    return "ok";
+});
+
+
 app.on("ready", createWindow);
->>>>>>> 02000b6 (BB-21: Profiles Dropdown Added)
