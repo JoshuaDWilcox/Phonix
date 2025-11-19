@@ -8,6 +8,10 @@ declare global {
     interface Window {
         api: {
             getProfiles: () => Promise<string[]>;
+            setProfilePath: (filename: string) => Promise<void>;
+            startSession: () => Promise<string>;
+            stopSession: () => Promise<string>;
+            chooseProfileFile: () => Promise<string | null>;
         };
     }
 }
