@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./profilesDropdown.css";
 
 interface Props {
     onSelect?: (profile: string) => void;
@@ -27,9 +28,9 @@ const ProfilesDropdown: React.FC<Props> = ({ onSelect }) => {
     };
 
     return (
-        <div>
-            <label htmlFor="profile-select">Select Profile:</label>
-            <select id="profile-select" value={selected} onChange={handleChange}>
+        <div className="profiles-dropdown-container">
+            <label className="profiles-dropdown-label" htmlFor="profile-select">Select Profile:</label>
+            <select id="profile-select" value={selected} onChange={handleChange} className="profiles-dropdown-select">
                 <option value="" disabled>
                     -- choose a profile --
                 </option>
