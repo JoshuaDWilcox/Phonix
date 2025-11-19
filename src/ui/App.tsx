@@ -16,9 +16,6 @@ function App() {
         <button onClick={() => setIsRecording((isRecording) => (isRecording === 0) ? 1 : 0)}>
             {isRecording === 1 ? "Stop Recording" : "Start Recording"}
         </button>
-        <p>
-          Profiles button coming soon
-        </p>
           <ProfilesDropdown onSelect={(p) => console.log("Selected:", p)} />
       </div>
       <p className="read-the-docs">
