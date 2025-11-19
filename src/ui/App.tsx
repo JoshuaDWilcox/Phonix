@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import PhonixSquareLogo from './assets/phonixSquareLogo.jpg'
+import ProfilesDropdown from "./components/profilesDropdown.tsx";
 import './App.css'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <p>
           Profiles button coming soon
         </p>
+          <ProfilesDropdown onSelect={(p) => console.log("Selected:", p)} />
       </div>
       <p className="read-the-docs">
 
