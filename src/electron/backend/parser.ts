@@ -1,4 +1,5 @@
 import { AppState } from "./state.js";
+import { sendActionToController } from "./controllerBridge.js";
 
 // Status words to filter out (from RealtimeSTT)
 const FILTER_WORDS = [
@@ -99,7 +100,10 @@ function checkForPhrases() {
     for (const phrase of candidates) {
         const trimmed = phrase.trim();
         if (AppState.mappings[trimmed]) {
-            console.log("[Parser] MATCH:", trimmed, "->", AppState.mappings[trimmed]);
+            const keymap = AppState.mappings[trimmed];
+            console.log("[Parser] MATCH:", trimmed, "->", keymap);
+            // Send the keymap action to the controller bridge
+            sendActionToController(keymap);
             // Clear the matched words from the queue to prevent re-matching
             const matchedWordCount = trimmed.split(" ").length;
             AppState.recentWords.splice(-matchedWordCount);
