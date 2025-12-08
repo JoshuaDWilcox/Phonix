@@ -28,4 +28,7 @@ export function loadProfileMappings() {
 
   AppState.mappings = map;
   console.log("[ProfileLoader] loaded", Object.keys(map).length, "mappings");
+  // Debug: show a few example mappings
+  const examples = Object.keys(map).slice(0, 5);
+  console.log("[ProfileLoader] example mappings:", examples);
 }
