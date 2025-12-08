@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import PhonixSquareLogo from './assets/phonixSquareLogo.jpg'
+// import PhonixSquareLogo from './assets/phonixSquareLogo.jpg'
+import PhonixTransparantLight from './assets/phonixTransparantLight.png'
 import ProfilesDropdown from "./components/profilesDropdown.tsx";
 import './App.css'
 
@@ -9,10 +10,11 @@ function App() {
   return (
     <>
       <div>
-          <img src={PhonixSquareLogo} className="logo phonix" alt="Phonix logo" />
+          <img src={PhonixTransparantLight} className="logo phonix" alt="Phonix logo" />
       </div>
       <h1></h1>
       <div className="card">
+        <ProfilesDropdown onSelect={(p) => window.api.setProfilePath(p)} />
         <button
           onClick={async () => {
             if (isRecording === 0) {
@@ -36,10 +38,8 @@ function App() {
         >
           {isRecording === 1 ? "Stop Recording" : "Start Recording"}
         </button>
-          <ProfilesDropdown onSelect={(p) => window.api.setProfilePath(p)} />
       </div>
       <p className="read-the-docs">
-
       </p>
     </>
   )

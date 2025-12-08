@@ -5,7 +5,7 @@ contextBridge.exposeInMainWorld("api", {
 
     // File chooser for selecting profile
     chooseProfileFile: (): Promise<string | null> => ipcRenderer.invoke("chooseProfileFile"),
-    
+
     // Start backend session (loads profile + starts python stub)
     startSession: (): Promise<string> => ipcRenderer.invoke("startSession"),
 
