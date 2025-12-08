@@ -1,7 +1,8 @@
 import { AppState } from "./state.js";
 
 export function handleWord(raw: string) {
-    const w = raw.toLowerCase().replace(/[^\w\s]/g, "").trim();
+    // Strip all non-alphabetical characters and convert to lowercase
+    const w = raw.toLowerCase().replace(/[^a-z]/g, "").trim();
     if (!w) return;
 
     AppState.recentWords.push(w);
