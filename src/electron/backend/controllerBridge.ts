@@ -47,6 +47,39 @@ export function sendActionToController(action: string) {
 
 export function stopControllerBridge() {
   if (!child) return;
-  child.kill();
+  console.log("[ControllerBridge] stopping python process");
+  
+  const processToKill = child;
   child = null;
+  
+  // Try graceful shutdown first
+  try {
+    if (!processToKill.killed) {
+      processToKill.kill("SIGTERM");
+    }
+  } catch (err) {
+    console.error("[ControllerBridge] Error sending SIGTERM:", err);
+  }
+  
+  // Force kill after a short timeout if it doesn't exit gracefully
+  const forceKillTimeout = setTimeout(() => {
+    try {
+      if (processToKill && !processToKill.killed) {
+        console.log("[ControllerBridge] force killing python process");
+        processToKill.kill("SIGKILL");
+      }
+    } catch (err) {
+      console.error("[ControllerBridge] Error force killing:", err);
+    }
+  }, 2000);
+  
+  // Clear timeout if process exits gracefully
+  processToKill.once("exit", () => {
+    clearTimeout(forceKillTimeout);
+  });
+}
+
+// Export function to check if process is running (for cleanup)
+export function isControllerBridgeRunning(): boolean {
+  return child !== null && !child.killed;
 }

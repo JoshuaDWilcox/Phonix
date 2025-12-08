@@ -13,7 +13,7 @@ pip install -r src/python/requirements.txt
 Or from the project root:
 
 ```bash
-pip install -r requirements.txt
+pip install -r src/python/requirements.txt
 ```
 
 **Note:** On first run, RealtimeSTT will automatically download the Whisper model (tiny.en ~75MB). This is a one-time download.

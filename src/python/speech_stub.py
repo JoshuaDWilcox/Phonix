@@ -7,6 +7,14 @@ Based on Phonix implementation patterns and RealtimeSTT best practices.
 """
 import sys
 import signal
+import logging
+
+# Suppress RealtimeSTT status messages by setting logging level to WARNING
+logging.basicConfig(level=logging.WARNING)
+# Specifically suppress RealtimeSTT logger
+logging.getLogger("RealtimeSTT").setLevel(logging.WARNING)
+logging.getLogger("RealTimeSTT").setLevel(logging.WARNING)
+
 from RealtimeSTT import AudioToTextRecorder
 
 # Configuration for low-latency game controller use
@@ -41,16 +49,102 @@ CONFIG = {
 # Global recorder instance
 recorder = None
 
+# Words/phrases to filter out (status messages, not actual transcriptions)
+FILTER_WORDS = {
+    "speak", "now", "speaknow",  # Handle both separate and concatenated
+    "recording", "transcribing", "listening", 
+    "ready", "model", "loaded", "error", "warning"
+}
+
 def signal_handler(sig, frame):
     """Handle shutdown signals gracefully."""
-    global recorder
     print("[speech] shutting down...", flush=True)
-    if recorder:
-        try:
-            recorder.__exit__(None, None, None)
-        except:
-            pass
+    # The context manager will handle cleanup automatically when sys.exit() unwinds the stack
+    # The 'with' statement will call __exit__() exactly once
     sys.exit(0)
+
+def extract_valid_words(text: str) -> list[str]:
+    """
+    Extract valid words from text, filtering out status messages.
+    Aggressively strips filter words from long concatenated strings.
+    """
+    if not text or not text.strip():
+        return []
+    
+    # Convert to lowercase and strip non-alphabetic
+    text_lower = ''.join(c for c in text.lower() if c.isalpha() or c.isspace())
+    
+    # Sort filter words by length (longest first) for better matching
+    sorted_filter_words = sorted(FILTER_WORDS, key=len, reverse=True)
+    
+    # Split by spaces
+    words = text_lower.split()
+    valid_words = []
+    
+    for word in words:
+        if not word or len(word) < 2:
+            continue
+        
+        # If word is suspiciously long (> 14 chars), aggressively strip filter words
+        if len(word) > 14:
+            cleaned = word
+            max_iterations = 30  # More iterations for complex cases
+            iteration = 0
+            
+            while iteration < max_iterations and cleaned:
+                iteration += 1
+                original = cleaned
+                
+                # Remove all filter words (try multiple times to catch all patterns)
+                for fw in sorted_filter_words:
+                    # Remove all occurrences
+                    cleaned = cleaned.replace(fw, '')
+                    # Remove repeated patterns (2x, 3x, etc.)
+                    for repeat in range(10, 0, -1):  # Try up to 10 repetitions
+                        pattern = fw * repeat
+                        if pattern in cleaned:
+                            cleaned = cleaned.replace(pattern, '')
+                
+                # If nothing changed, we're done
+                if cleaned == original:
+                    break
+            
+            # If nothing left after stripping, skip it
+            if not cleaned or len(cleaned) < 2:
+                continue
+            
+            # Final check: if it still contains any filter word, skip it
+            if any(fw in cleaned for fw in FILTER_WORDS):
+                continue
+            
+            word = cleaned
+        
+        # Final validation: must be reasonable length and not a status word
+        if (len(word) >= 2 and 
+            len(word) <= 20 and
+            word not in FILTER_WORDS and
+            not any(fw in word for fw in FILTER_WORDS)):
+            valid_words.append(word)
+    
+    return valid_words
+
+def is_valid_word(word: str) -> bool:
+    """Check if a word is a valid transcription (not a status message)."""
+    if not word or len(word) < 2:  # Too short to be meaningful
+        return False
+    if word in FILTER_WORDS:
+        return False
+    # Check if it's a repeated status message (like "speaknowspeaknow")
+    if any(filter_word in word for filter_word in FILTER_WORDS):
+        return False
+    # Check if word is suspiciously long (likely concatenated status messages)
+    if len(word) > 20:  # Normal words shouldn't be this long
+        return False
+    # Check for repeated patterns (like "speaknowspeaknow" or "recordingrecording")
+    for filter_word in FILTER_WORDS:
+        if filter_word * 2 in word:  # Repeated status word
+            return False
+    return True
 
 def on_realtime_transcription_update(text: str):
     """
@@ -59,15 +153,12 @@ def on_realtime_transcription_update(text: str):
     This is the primary method for rapid word detection.
     """
     if text and text.strip():
-        # Clean and output the transcribed text immediately
-        cleaned = text.strip()
-        # Split by spaces to handle multiple words, output each separately
-        words = cleaned.split()
-        for word in words:
-            # Strip all non-alphabetical characters and convert to lowercase
-            word_clean = ''.join(c for c in word if c.isalpha()).lower()
-            if word_clean:  # Only output if there are letters left
-                print(word_clean, flush=True)  # Output each word immediately
+        # Use extract_valid_words to handle concatenated status messages
+        valid_words = extract_valid_words(text)
+        # Only output if we found valid words (skip if text was all status messages)
+        if valid_words:
+            for word in valid_words:
+                print(word, flush=True)  # Output each valid word immediately
 
 def on_realtime_transcription_stabilized(text: str):
     """
@@ -76,15 +167,10 @@ def on_realtime_transcription_stabilized(text: str):
     We use this as a backup/confirmation, but real-time updates are primary.
     """
     if text and text.strip():
-        # Output stabilized text - this is the final, accurate transcription
-        cleaned = text.strip()
-        # Split and output each word separately for consistency
-        words = cleaned.split()
-        for word in words:
-            # Strip all non-alphabetical characters and convert to lowercase
-            word_clean = ''.join(c for c in word if c.isalpha()).lower()
-            if word_clean:  # Only output if there are letters left
-                print(word_clean, flush=True)  # Output each word
+        # Use extract_valid_words to handle concatenated status messages
+        valid_words = extract_valid_words(text)
+        for word in valid_words:
+            print(word, flush=True)  # Output each valid word
 
 def main():
     """Main function to initialize and run the speech-to-text recorder."""
@@ -145,14 +231,10 @@ def main():
                         # With aggressive VAD settings, this should fire for each word/phrase
                         text = recorder.text()
                         if text and text.strip():
-                            cleaned = text.strip()
-                            # Split and output each word separately
-                            words = cleaned.split()
-                            for word in words:
-                                # Strip all non-alphabetical characters and convert to lowercase
-                                word_clean = ''.join(c for c in word if c.isalpha()).lower()
-                                if word_clean:  # Only output if there are letters left
-                                    print(word_clean, flush=True)  # Output each word immediately
+                            # Use extract_valid_words to handle concatenated status messages
+                            valid_words = extract_valid_words(text)
+                            for word in valid_words:
+                                print(word, flush=True)  # Output each valid word immediately
                     except Exception as e:
                         if processing:  # Only log if we're still supposed to be running
                             # Ignore EOF errors when shutting down
@@ -179,12 +261,7 @@ def main():
         import traceback
         traceback.print_exc(file=sys.stderr)
         sys.exit(1)
-    finally:
-        if recorder:
-            try:
-                recorder.__exit__(None, None, None)
-            except:
-                pass
+    # No finally block needed - the 'with' statement automatically calls __exit__()
 
 if __name__ == "__main__":
     main()
