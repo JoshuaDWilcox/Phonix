@@ -68,7 +68,39 @@ export function startSpeechFromPython() {
 export function stopSpeechFromPython() {
     if (!child) return;
     console.log("[SpeechBridge] stopping python speech process");
-    child.kill();
+    
+    const processToKill = child;
     child = null;
     buffer = "";
+    
+    // Try graceful shutdown first
+    try {
+        if (!processToKill.killed) {
+            processToKill.kill("SIGTERM");
+        }
+    } catch (err) {
+        console.error("[SpeechBridge] Error sending SIGTERM:", err);
+    }
+    
+    // Force kill after a short timeout if it doesn't exit gracefully
+    const forceKillTimeout = setTimeout(() => {
+        try {
+            if (processToKill && !processToKill.killed) {
+                console.log("[SpeechBridge] force killing python process");
+                processToKill.kill("SIGKILL");
+            }
+        } catch (err) {
+            console.error("[SpeechBridge] Error force killing:", err);
+        }
+    }, 2000);
+    
+    // Clear timeout if process exits gracefully
+    processToKill.once("exit", () => {
+        clearTimeout(forceKillTimeout);
+    });
+}
+
+// Export function to check if process is running (for cleanup)
+export function isSpeechProcessRunning(): boolean {
+    return child !== null && !child.killed;
 }
