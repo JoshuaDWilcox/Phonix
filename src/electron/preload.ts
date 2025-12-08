@@ -19,6 +19,9 @@ contextBridge.exposeInMainWorld("api", {
 
     // Save profile content
     saveProfile: (filename: string, content: any): Promise<string> => ipcRenderer.invoke("saveProfile", filename, content),
+
+    // Import profile dialog
+    importProfile: (): Promise<string | null> => ipcRenderer.invoke("import-profile"),
 });
 
 console.log("Preload loaded!");

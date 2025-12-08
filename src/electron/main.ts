@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -104,6 +104,37 @@ ipcMain.handle("saveProfile", async (_, filename: string, content: any) => {
     } catch (err) {
         console.error("Failed to save profile:", fullPath, err);
         throw err;
+    }
+});
+
+// IPC handler: import a profile JSON from file system
+ipcMain.handle("import-profile", async () => {
+    const { canceled, filePaths } = await dialog.showOpenDialog({
+        title: "Import Control Profile",
+        properties: ["openFile"],
+        filters: [{ name: "JSON", extensions: ["json"] }]
+    });
+
+    if (canceled || filePaths.length === 0) {
+        return null;
+    }
+
+    const sourcePath = filePaths[0];
+    const filename = path.basename(sourcePath);
+
+    const profilesDir = isDev()
+        ? path.join(process.cwd(), "src", "profiles")
+        : path.join(app.getAppPath(), "src/profiles");
+
+    const destPath = path.join(profilesDir, filename);
+
+    try {
+        fs.copyFileSync(sourcePath, destPath);
+        console.log("[Backend] Imported profile:", destPath);
+        return filename;
+    } catch (err) {
+        console.error("Failed to import profile:", err);
+        return null;
     }
 });
 

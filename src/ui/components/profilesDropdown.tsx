@@ -17,6 +17,7 @@ declare global {
             chooseProfileFile: () => Promise<string | null>;
             readProfile: (filename: string) => Promise<any>;
             saveProfile: (filename: string, content: any) => Promise<string>;
+            importProfile: () => Promise<string | null>;
         };
     }
 }
