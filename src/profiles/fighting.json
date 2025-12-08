@@ -226,7 +226,7 @@
     },
     {
         "keyword": "dash forward",
-        "keymap": ["pressXUSB_GAMEPAD_DPAD_RIGHT", 0.2, "releaseXUSB_GAMEPAD_DPAD_RIGHT",
+        "keymap": ["pressXUSB_GAMEPAD_DPAD_RIGHT", 0.2, "releaseXUSB_GAMEPAD_DPAD_RIGHT", 0.2,
                    "pressXUSB_GAMEPAD_DPAD_RIGHT", 0.2, "releaseXUSB_GAMEPAD_DPAD_RIGHT"]
     },
     {

@@ -1,3 +1,4 @@
 realtimestt @ git+https://github.com/mdv314/RealtimeSTT_faster.git
 numpy>=1.21.0
+vgamepad>=0.1.0
 
