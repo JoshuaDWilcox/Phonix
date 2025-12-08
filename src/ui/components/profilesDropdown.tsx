@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./profilesDropdown.css";
 
 interface Props {
-    onSelect?: (profile: string) => void;
+    profiles: string[];
+    selectedProfile: string;
+    onSelect: (profile: string) => void;
 }
 
 declare global {
@@ -13,28 +15,24 @@ declare global {
             startSession: () => Promise<string>;
             stopSession: () => Promise<string>;
             chooseProfileFile: () => Promise<string | null>;
+            readProfile: (filename: string) => Promise<any>;
+            saveProfile: (filename: string, content: any) => Promise<string>;
         };
     }
 }
 
-const ProfilesDropdown: React.FC<Props> = ({ onSelect }) => {
-    const [profiles, setProfiles] = useState<string[]>([]);
-    const [selected, setSelected] = useState("");
+const ProfilesDropdown: React.FC<Props> = ({ profiles, selectedProfile, onSelect }) => {
 
-    useEffect(() => {
-        window.api.getProfiles().then(setProfiles);
-    }, []);
+    // Internal state moved to App.tsx
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
-        setSelected(value);
-        onSelect?.(value);
+        onSelect(value);
     };
 
     return (
         <div className="profiles-dropdown-container">
-            <label className="profiles-dropdown-label" htmlFor="profile-select">Select Profile:</label>
-            <select id="profile-select" value={selected} onChange={handleChange} className="profiles-dropdown-select">
+            <select id="profile-select" value={selectedProfile} onChange={handleChange} className="profiles-dropdown-select">
                 <option value="" disabled>
                     -- choose a profile --
                 </option>

@@ -13,6 +13,12 @@ contextBridge.exposeInMainWorld("api", {
     stopSession: (): Promise<string> => ipcRenderer.invoke("stopSession"),
 
     setProfilePath: (filename: string) => ipcRenderer.invoke("setProfilePath", filename),
+
+    // Read profile content
+    readProfile: (filename: string): Promise<any> => ipcRenderer.invoke("readProfile", filename),
+
+    // Save profile content
+    saveProfile: (filename: string, content: any): Promise<string> => ipcRenderer.invoke("saveProfile", filename, content),
 });
 
 console.log("Preload loaded!");
