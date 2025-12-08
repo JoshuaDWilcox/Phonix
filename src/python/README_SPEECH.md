@@ -7,6 +7,12 @@ This module uses [RealtimeSTT_faster](https://github.com/mdv314/RealtimeSTT_fast
 Install Python dependencies:
 
 ```bash
+pip install -r src/python/requirements.txt
+```
+
+Or from the project root:
+
+```bash
 pip install -r requirements.txt
 ```
 
