@@ -19,7 +19,7 @@ def main():
         if not action:
             continue
 
-        # TODO: replace this with your real EchoPlay controller emulator.
+        # TODO: replace this with your real Phonix controller emulator.
         print(f"[controller_bridge] would execute: {action}", flush=True)
 
 if __name__ == "__main__":

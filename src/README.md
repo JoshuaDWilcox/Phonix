@@ -27,3 +27,18 @@ first: `npm install --save-dev electron`
 also: `npm install electron-builder --save-dev` (this is a big one)  
 also: `npm install --save-dev cross-env` (for linux and mac devs)  
 also: `npm i --save-dev npm-run-all`
+
+# Python Dependencies
+
+Install Python dependencies for speech-to-text functionality:
+
+```bash
+pip install -r src/python/requirements.txt
+```
+
+# References
+
+- RealtimeSTT_faster. (2024). mdv314/RealtimeSTT_faster. GitHub. https://github.com/mdv314/RealtimeSTT_faster
+- RealtimeSTT. (2024). KoljaB/RealtimeSTT. GitHub. https://github.com/KoljaB/RealtimeSTT
+- Radford, A., et al. (2022). Robust Speech Recognition via Large-Scale Weak Supervision. OpenAI Whisper. https://github.com/openai/whisper
+- Electron. (2024). Electron - Build cross-platform desktop apps with JavaScript, HTML, and CSS. https://www.electronjs.org/

@@ -17,7 +17,7 @@ export function startSpeechFromPython() {
     process.cwd(),
     "src",
     "python",
-    "speech_stub.py" // temporary python file, will be replaced with speech to text AI parser in future sprints. just here for architecture right now
+    "speech_stub.py" // RealtimeSTT speech-to-text implementation
     );
 
     child = spawn("python", [scriptPath], {
@@ -38,8 +38,8 @@ export function startSpeechFromPython() {
             for (const line of lines) {
                 const trimmed = line.trim();
                 if (!trimmed) continue;
-                // Ignore log lines like "[speech_stub] ready"
-                if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+                // Ignore log lines like "[speech] ready" or "[speech] model loaded"
+                if (trimmed.startsWith("[speech]") || (trimmed.startsWith("[") && trimmed.endsWith("]"))) {
                     console.log("[SpeechBridge python log]", trimmed);
                     continue;
                 }
