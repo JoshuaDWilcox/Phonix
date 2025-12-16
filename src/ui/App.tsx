@@ -108,12 +108,15 @@ function App() {
                 setIsRecording(1);
                 await window.api.startSession();
 
+<<<<<<< HEAD
                 // Wait for ready signal from backend
                 window.api.onRecorderReady(() => {
                   console.log("Frontend received recorder ready signal");
                   setIsRecording(2);
                 });
 
+=======
+>>>>>>> dev
               } catch (err) {
                 console.error("Failed to start session:", err);
                 setIsRecording(0); // Reset on error

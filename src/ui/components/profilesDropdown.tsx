@@ -19,7 +19,12 @@ declare global {
             readProfile: (filename: string) => Promise<any>;
             saveProfile: (filename: string, content: any) => Promise<string>;
             importProfile: () => Promise<string | null>;
+<<<<<<< HEAD
             onRecorderReady: (callback: () => void) => void;
+=======
+            onRecorderReady: (callback: () => void) => () => void;
+            onSessionStatus: (callback: (data: { isRunning: boolean; error?: string }) => void) => () => void;
+>>>>>>> dev
         };
     }
 }
