@@ -1,4 +1,5 @@
 import fs from "fs";
+import path from "path";
 import { AppState } from "./state.js";
 
 export function loadProfileMappings() {
@@ -21,6 +22,27 @@ export function loadProfileMappings() {
         // Store the keymap as JSON string for now (parser will handle it)
         const keyword = entry.keyword.toLowerCase().trim();
         map[keyword] = JSON.stringify(entry.keymap);
+      }
+    }
+  }
+
+  // Load synonyms and expand mappings
+  const synonymsPath = path.join(process.cwd(), "src", "profiles", "synonyms", "synonyms.json");
+  if (fs.existsSync(synonymsPath)) {
+    const synonymsRaw = fs.readFileSync(synonymsPath, "utf-8");
+    const synonymsJson = JSON.parse(synonymsRaw);
+    if (Array.isArray(synonymsJson.synonyms)) {
+      for (const entry of synonymsJson.synonyms) {
+        const baseKeyword = entry.keyword_match.toLowerCase().trim();
+        if (map[baseKeyword]) {
+          const baseKeymap = map[baseKeyword];
+          for (const synonym of entry.synonym_words) {
+            const synKey = synonym.toLowerCase().trim();
+            if (!map[synKey]) {
+              map[synKey] = baseKeymap;
+            }
+          }
+        }
       }
     }
   }
