@@ -12,7 +12,7 @@ export function startControllerBridge() {
     ? path.join(process.cwd(), "src", "python", "controller_bridge.py")
     : path.join(path.dirname(app.getPath("exe")), "src", "python", "controller_bridge.py");
 
-  child = spawn("python", [scriptPath], {
+  child = spawn("python3", [scriptPath], {
     stdio: ["pipe", "pipe", "pipe"],
   });
 

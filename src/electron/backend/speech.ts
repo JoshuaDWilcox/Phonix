@@ -9,8 +9,10 @@ import { handleWord } from "./parser.js";
 let child: ChildProcess | null = null;
 let buffer = "";
 
-export function startSpeechFromPython() {
+export function startSpeechFromPython(window: any) {
     if (child) {
+        // already running
+        return;
         // already running
         return;
     }
@@ -19,7 +21,7 @@ export function startSpeechFromPython() {
         ? path.join(process.cwd(), "src", "python", "speech_stub.py")
         : path.join(path.dirname(app.getPath("exe")), "src", "python", "speech_stub.py");
 
-    child = spawn("python", [scriptPath], {
+    child = spawn("python3", [scriptPath], {
         stdio: ["ignore", "pipe", "pipe"], // we only read its stdout/stderr
     });
 
@@ -53,7 +55,14 @@ export function startSpeechFromPython() {
 
     if (child.stderr) {
         child.stderr.on("data", (data) => {
-            console.error("[SpeechBridge python ERR]", data.toString().trim());
+            const msg = data.toString().trim();
+            // console.error("[SpeechBridge python ERR]", msg); // Optional: keep or comment out to reduce noise
+
+            // Check for ready signal
+            if (msg.includes("[speech] ready") || msg.includes("[speech] model loaded")) {
+                console.log("[SpeechBridge] Python speech ready!");
+                window.webContents.send("on-recorder-ready");
+            }
         });
     }
 

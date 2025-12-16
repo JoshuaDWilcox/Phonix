@@ -17,7 +17,7 @@ export function registerBackend(window: BrowserWindow) {
   });
 
   ipcMain.handle("startSession", async () => {
-    startSession();
+    startSession(window);
     return "ok";
   });
 
