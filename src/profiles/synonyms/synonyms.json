@@ -10,6 +10,47 @@
             ]
         },
         {
+            "keyword_match": "a",
+            "synonym_words": [
+                "hey",
+                "okay",
+                "way"
+            ]
+        },
+        {
+            "keyword_match": "b",
+            "synonym_words": [
+                "be",
+                "bee",
+                "see",
+                "bean"
+            ]
+        },
+        {
+            "keyword_match": "x",
+            "synonym_words": [
+                "next",
+                "hex"
+            ]
+        },
+        {
+            "keyword_match": "y",
+            "synonym_words": [
+                "why",
+                "hi",
+                "jump",
+                "bye"
+            ]
+        },
+        {
+            "keyword_match": "fire slash",
+            "synonym_words": [
+                "fire splash",
+                "hire slash",
+                "hire splash"
+            ]
+        },
+        {
             "keyword_match": "hit",
             "synonym_words": [
                 "heat",
