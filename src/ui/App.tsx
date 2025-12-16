@@ -20,6 +20,25 @@ function App() {
 
   useEffect(() => {
     fetchProfiles();
+
+    // Listen for session status updates (e.g. unexpected stops)
+    const unsubscribeStatus = window.api.onSessionStatus((data: { isRunning: boolean; error?: string }) => {
+      setIsRecording(data.isRunning ? 1 : 0);
+      if (data.error) {
+        alert(`Session stopped unexpectedly: ${data.error}`);
+      }
+    });
+
+    // Listen for ready signal
+    const unsubscribeReady = window.api.onRecorderReady(() => {
+      console.log("Frontend received recorder ready signal");
+      setIsRecording(2);
+    });
+
+    return () => {
+      unsubscribeStatus();
+      unsubscribeReady();
+    };
   }, []);
 
   const handleProfileSelect = (p: string) => {

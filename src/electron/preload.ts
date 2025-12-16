@@ -23,8 +23,19 @@ contextBridge.exposeInMainWorld("api", {
     // Import profile dialog
     importProfile: (): Promise<string | null> => ipcRenderer.invoke("import-profile"),
 
-    // Listen for recorder ready signal from python
-    onRecorderReady: (callback: () => void) => ipcRenderer.on("on-recorder-ready", (_event) => callback()),
+    // Listen for session status updates (e.g. error stops)
+    onSessionStatus: (callback: (data: { isRunning: boolean; error?: string }) => void) => {
+        const subscription = (_: any, data: any) => callback(data);
+        ipcRenderer.on("session-status", subscription);
+        return () => ipcRenderer.removeListener("session-status", subscription);
+    },
+
+    // Listen for recorder ready signal
+    onRecorderReady: (callback: () => void) => {
+        const subscription = () => callback();
+        ipcRenderer.on("on-recorder-ready", subscription);
+        return () => ipcRenderer.removeListener("on-recorder-ready", subscription);
+    }
 });
 
 console.log("Preload loaded!");

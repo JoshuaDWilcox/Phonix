@@ -1,7 +1,7 @@
 import { spawn, ChildProcess } from "child_process";
 import path from "path";
 import { app } from "electron";
-import { isDev } from "../util.js";
+import { isDev, getPythonCommand } from "../util.js";
 import { AppState } from "./state.js";
 import { handleWord } from "./parser.js";
 
@@ -21,7 +21,7 @@ export function startSpeechFromPython(window: any) {
         ? path.join(process.cwd(), "src", "python", "speech_stub.py")
         : path.join(path.dirname(app.getPath("exe")), "src", "python", "speech_stub.py");
 
-    child = spawn("python3", [scriptPath], {
+    child = spawn(getPythonCommand(), [scriptPath], {
         stdio: ["ignore", "pipe", "pipe"], // we only read its stdout/stderr
     });
 
