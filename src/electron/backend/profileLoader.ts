@@ -46,7 +46,6 @@ export function loadProfileMappings() {
       }
     }
   }
-
   AppState.mappings = map;
   console.log("[ProfileLoader] loaded", Object.keys(map).length, "mappings");
   // Debug: show a few example mappings
