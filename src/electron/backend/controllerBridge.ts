@@ -1,17 +1,16 @@
 import { spawn, type ChildProcess } from "child_process";
 import path from "path";
+import { app } from "electron";
+import { isDev } from "../util.js";
 
 let child: ChildProcess | null = null;
 
 export function startControllerBridge() {
   if (child) return; // already running
 
-  const scriptPath = path.join(
-    process.cwd(),
-    "src",
-    "python",
-    "controller_bridge.py"
-  );
+  const scriptPath = isDev()
+    ? path.join(process.cwd(), "src", "python", "controller_bridge.py")
+    : path.join(path.dirname(app.getPath("exe")), "src", "python", "controller_bridge.py");
 
   child = spawn("python", [scriptPath], {
     stdio: ["pipe", "pipe", "pipe"],
@@ -48,10 +47,10 @@ export function sendActionToController(action: string) {
 export function stopControllerBridge() {
   if (!child) return;
   console.log("[ControllerBridge] stopping python process");
-  
+
   const processToKill = child;
   child = null;
-  
+
   // Try graceful shutdown first
   try {
     if (!processToKill.killed) {
@@ -60,7 +59,7 @@ export function stopControllerBridge() {
   } catch (err) {
     console.error("[ControllerBridge] Error sending SIGTERM:", err);
   }
-  
+
   // Force kill after a short timeout if it doesn't exit gracefully
   const forceKillTimeout = setTimeout(() => {
     try {
@@ -72,7 +71,7 @@ export function stopControllerBridge() {
       console.error("[ControllerBridge] Error force killing:", err);
     }
   }, 2000);
-  
+
   // Clear timeout if process exits gracefully
   processToKill.once("exit", () => {
     clearTimeout(forceKillTimeout);

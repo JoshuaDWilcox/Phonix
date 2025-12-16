@@ -1,5 +1,4 @@
 import fs from "fs";
-import path from "path";
 import { AppState } from "./state.js";
 
 export function loadProfileMappings() {
