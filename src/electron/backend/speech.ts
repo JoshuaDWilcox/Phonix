@@ -1,5 +1,7 @@
 import { spawn, ChildProcess } from "child_process";
 import path from "path";
+import { app } from "electron";
+import { isDev } from "../util.js";
 import { AppState } from "./state.js";
 import { handleWord } from "./parser.js";
 
@@ -9,24 +11,21 @@ let buffer = "";
 
 export function startSpeechFromPython() {
     if (child) {
-    // already running
-    return;
+        // already running
+        return;
     }
 
-    const scriptPath = path.join(
-    process.cwd(),
-    "src",
-    "python",
-    "speech_stub.py" // RealtimeSTT speech-to-text implementation
-    );
+    const scriptPath = isDev()
+        ? path.join(process.cwd(), "src", "python", "speech_stub.py")
+        : path.join(path.dirname(app.getPath("exe")), "src", "python", "speech_stub.py");
 
     child = spawn("python", [scriptPath], {
-    stdio: ["ignore", "pipe", "pipe"], // we only read its stdout/stderr
+        stdio: ["ignore", "pipe", "pipe"], // we only read its stdout/stderr
     });
 
     console.log("[SpeechBridge] started python:", scriptPath);
 
-    if ( child.stdout ) {
+    if (child.stdout) {
         child.stdout.on("data", (data) => {
             const text = data.toString();
             buffer += text;
@@ -51,9 +50,8 @@ export function startSpeechFromPython() {
             }
         });
     }
-    
-    if ( child.stderr )
-    {
+
+    if (child.stderr) {
         child.stderr.on("data", (data) => {
             console.error("[SpeechBridge python ERR]", data.toString().trim());
         });
@@ -68,11 +66,11 @@ export function startSpeechFromPython() {
 export function stopSpeechFromPython() {
     if (!child) return;
     console.log("[SpeechBridge] stopping python speech process");
-    
+
     const processToKill = child;
     child = null;
     buffer = "";
-    
+
     // Try graceful shutdown first
     try {
         if (!processToKill.killed) {
@@ -81,7 +79,7 @@ export function stopSpeechFromPython() {
     } catch (err) {
         console.error("[SpeechBridge] Error sending SIGTERM:", err);
     }
-    
+
     // Force kill after a short timeout if it doesn't exit gracefully
     const forceKillTimeout = setTimeout(() => {
         try {
@@ -93,7 +91,7 @@ export function stopSpeechFromPython() {
             console.error("[SpeechBridge] Error force killing:", err);
         }
     }, 2000);
-    
+
     // Clear timeout if process exits gracefully
     processToKill.once("exit", () => {
         clearTimeout(forceKillTimeout);
