@@ -3,7 +3,7 @@ import { startSpeechFromPython, stopSpeechFromPython } from "./speech.js";
 import { loadProfileMappings } from "./profileLoader.js";
 import { startControllerBridge, stopControllerBridge } from "./controllerBridge.js";
 
-export function startSession() {
+export function startSession(window: any) {
   if (!AppState.profileFilePath) {
     throw new Error("No profile JSON selected!");
   }
@@ -15,7 +15,7 @@ export function startSession() {
   AppState.isRunning = true;
 
   // TODO: read JSON, build AppState.mappings
-  startSpeechFromPython();
+  startSpeechFromPython(window);
 }
 
 export function stopSession() {

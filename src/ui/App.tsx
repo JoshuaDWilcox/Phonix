@@ -81,12 +81,21 @@ function App() {
             if (isRecording === 0) {
               // START
               try {
-                await window.api.startSession();
+                // Set to loading state (1)
                 setIsRecording(1);
+                await window.api.startSession();
+
+                // Wait for ready signal from backend
+                window.api.onRecorderReady(() => {
+                  console.log("Frontend received recorder ready signal");
+                  setIsRecording(2);
+                });
+
               } catch (err) {
                 console.error("Failed to start session:", err);
+                setIsRecording(0); // Reset on error
               }
-            } else {
+            } else if (isRecording === 2) {
               // STOP
               try {
                 await window.api.stopSession();
@@ -96,9 +105,14 @@ function App() {
               }
             }
           }}
+          // Disable button only when in loading state (1)
+          disabled={isRecording === 1}
         >
-          {isRecording === 1 ? "Stop Recording" : "Start Recording"}
+          {isRecording === 2 ? "Stop Recording" : (isRecording === 1 ? "Starting..." : "Start Recording")}
         </button>
+        {isRecording === 2 && (
+          <p className="ready-text" style={{ color: 'green', marginTop: '10px' }}>Program is ready!</p>
+        )}
       </div>
       <p className="read-the-docs">
       </p>

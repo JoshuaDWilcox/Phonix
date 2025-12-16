@@ -22,6 +22,9 @@ contextBridge.exposeInMainWorld("api", {
 
     // Import profile dialog
     importProfile: (): Promise<string | null> => ipcRenderer.invoke("import-profile"),
+
+    // Listen for recorder ready signal from python
+    onRecorderReady: (callback: () => void) => ipcRenderer.on("on-recorder-ready", (_event) => callback()),
 });
 
 console.log("Preload loaded!");
