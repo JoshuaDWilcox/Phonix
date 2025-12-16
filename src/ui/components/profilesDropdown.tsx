@@ -5,6 +5,7 @@ interface Props {
     profiles: string[];
     selectedProfile: string;
     onSelect: (profile: string) => void;
+    disabled?: boolean;
 }
 
 declare global {
@@ -23,7 +24,7 @@ declare global {
     }
 }
 
-const ProfilesDropdown: React.FC<Props> = ({ profiles, selectedProfile, onSelect }) => {
+const ProfilesDropdown: React.FC<Props> = ({ profiles, selectedProfile, onSelect, disabled }) => {
 
     // Internal state moved to App.tsx
 
@@ -34,7 +35,13 @@ const ProfilesDropdown: React.FC<Props> = ({ profiles, selectedProfile, onSelect
 
     return (
         <div className="profiles-dropdown-container">
-            <select id="profile-select" value={selectedProfile} onChange={handleChange} className="profiles-dropdown-select">
+            <select
+                id="profile-select"
+                value={selectedProfile}
+                onChange={handleChange}
+                className="profiles-dropdown-select"
+                disabled={disabled}
+            >
                 <option value="" disabled>
                     -- choose a profile --
                 </option>
