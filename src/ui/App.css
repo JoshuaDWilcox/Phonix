@@ -1,0 +1,198 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 9em;
+  padding: 1em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 0.5rem 2rem 2rem 2rem;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+/* Help Button */
+.help-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+  z-index: 100;
+}
+
+.help-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #8ec3e6;
+  transform: scale(1.1);
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background: linear-gradient(135deg, #0456c2 0%, #00022e 70%, #00011b 100%);
+  background-attachment: fixed;
+  padding: 2.5rem;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 90%;
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+  animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalPop {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: #8ec3e6;
+  /* Soft purple to match theme */
+  margin-bottom: 1.5rem;
+}
+
+.modal-content p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+.modal-footer {
+  margin-top: 1.5rem;
+  font-weight: 500;
+  color: #8ec3e6;
+}
+
+.modal-close-btn {
+  margin-top: 1.5rem;
+  width: 100%;
+  background: #00044b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.modal-close-btn:hover {
+  background: #00044b;
+}
+
+.select-profile-label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #e0e0e0;
+  margin: 0;
+  margin-bottom: 0.25rem;
+}
+
+.profile-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 2rem;
+  /* Ensure container is wide enough or full width to define center */
+  width: 100%;
+}
+
+.profile-actions {
+  position: absolute;
+  /* Dropdown is 240px + 32px padding = 272px wide. Half is 136px. */
+  left: calc(50% + 146px);
+  /* 136px + 10px gap */
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 0.5rem;
+}
+
+.icon-button {
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.icon-button:hover:not(:disabled) {
+  background: #2a2a2a;
+  border-color: #646cff;
+}
+
+.icon-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

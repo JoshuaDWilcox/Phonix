@@ -1,0 +1,56 @@
+name: jira-key-check
+on:
+  pull_request:
+    branches: [ main, dev ]
+permissions:
+  contents: read
+  pull-requests: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get PR commits
+        id: commits
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const commits = await github.rest.pulls.listCommits({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              per_page: 250
+            });
+            core.setOutput('messages', JSON.stringify(commits.data.map(c => c.commit.message)));
+
+      - name: Validate commit messages contain Jira key
+        env:
+          MESSAGES: ${{ steps.commits.outputs.messages }}
+          # Adjust the regex if your project keys differ. This matches e.g. ABC-1, SRE-42, IO-9000.
+          JIRA_KEY_REGEX: '^BB-[0-9]+: '
+        run: |
+          echo "$MESSAGES" | python3 - <<'PY'
+          import json, os, re, sys
+          msgs = json.loads(os.environ["MESSAGES"])
+          pat = re.compile(os.environ["JIRA_KEY_REGEX"])
+          bad = [m.splitlines()[0] for m in msgs if not pat.search(m)]
+          if bad:
+              print("❌ These commit headers are missing a Jira key:")
+              for m in bad:
+                  print("  -", m)
+              sys.exit(1)
+          else:
+              print("✅ All commit messages include a Jira key.")
+          PY
+
+      - name: Validate PR title contains Jira key (covers squash-merge)
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+          JIRA_KEY_REGEX: '^BB-[0-9]+: '
+        run: |
+          python3 - <<'PY'
+          import os, re, sys
+          if not re.search(os.environ["JIRA_KEY_REGEX"], os.environ["TITLE"]):
+              print(f"❌ PR title missing Jira key: '{os.environ['TITLE']}'")
+              sys.exit(1)
+          print("✅ PR title contains a Jira key.")
+          PY
