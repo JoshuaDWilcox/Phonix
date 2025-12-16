@@ -1,0 +1,256 @@
+{
+    "synonyms": [
+        {
+            "keyword_match": "jump",
+            "synonym_words": [
+                "jumped",
+                "dump",
+                "lump",
+                "pump"
+            ]
+        },
+        {
+            "keyword_match": "hit",
+            "synonym_words": [
+                "heat",
+                "it",
+                "bit",
+                "fit"
+            ]
+        },
+        {
+            "keyword_match": "dodge",
+            "synonym_words": [
+                "dutch",
+                "dodge",
+                "botch",
+                "notch"
+            ]
+        },
+        {
+            "keyword_match": "block",
+            "synonym_words": [
+                "bloc",
+                "bloke",
+                "clock",
+                "flock"
+            ]
+        },
+        {
+            "keyword_match": "uppercut",
+            "synonym_words": [
+                "upper kit",
+                "up or cut",
+                "upper cot",
+                "up a cut"
+            ]
+        },
+        {
+            "keyword_match": "throw",
+            "synonym_words": [
+                "threw",
+                "through",
+                "throe",
+                "thru"
+            ]
+        },
+        {
+            "keyword_match": "spear",
+            "synonym_words": [
+                "speer",
+                "spare",
+                "sphere",
+                "spier"
+            ]
+        },
+        {
+            "keyword_match": "teleport",
+            "synonym_words": [
+                "tell a port",
+                "tele port",
+                "telly port",
+                "teleported"
+            ]
+        },
+        {
+            "keyword_match": "hellfire",
+            "synonym_words": [
+                "hell fire",
+                "elf ire",
+                "hell far",
+                "help fire"
+            ]
+        },
+        {
+            "keyword_match": "takedown",
+            "synonym_words": [
+                "take down",
+                "take dun",
+                "tack down",
+                "take done"
+            ]
+        },
+        {
+            "keyword_match": "x ray",
+            "synonym_words": [
+                "ex ray",
+                "x ray",
+                "eggs ray",
+                "x rayed"
+            ]
+        },
+        {
+            "keyword_match": "sliding kick",
+            "synonym_words": [
+                "sliding quick",
+                "sliding kit",
+                "sliding click",
+                "sliding kick"
+            ]
+        },
+        {
+            "keyword_match": "soft up",
+            "synonym_words": [
+                "soft up",
+                "saw ft up",
+                "soft up",
+                "sawed up"
+            ]
+        },
+        {
+            "keyword_match": "hard up",
+            "synonym_words": [
+                "hard up",
+                "heart up",
+                "hard up",
+                "har dup"
+            ]
+        },
+        {
+            "keyword_match": "soft down",
+            "synonym_words": [
+                "soft down",
+                "saw ft down",
+                "soft down",
+                "sawed down"
+            ]
+        },
+        {
+            "keyword_match": "hard down",
+            "synonym_words": [
+                "hard down",
+                "heart down",
+                "hard down",
+                "har down"
+            ]
+        },
+        {
+            "keyword_match": "look soft left",
+            "synonym_words": [
+                "look soft left",
+                "look saw ft left",
+                "look soft left",
+                "look soft left"
+            ]
+        },
+        {
+            "keyword_match": "look hard left",
+            "synonym_words": [
+                "look hard left",
+                "look heart left",
+                "look hard left",
+                "look hard left"
+            ]
+        },
+        {
+            "keyword_match": "look soft right",
+            "synonym_words": [
+                "look soft right",
+                "look saw ft right",
+                "look soft right",
+                "look soft right"
+            ]
+        },
+        {
+            "keyword_match": "look hard right",
+            "synonym_words": [
+                "look hard right",
+                "look heart right",
+                "look hard right",
+                "look hard right"
+            ]
+        },
+        {
+            "keyword_match": "trigger right",
+            "synonym_words": [
+                "triggers right",
+                "trigger write",
+                "triggers write",
+                "trigger rite"
+            ]
+        },
+        {
+            "keyword_match": "trigger left",
+            "synonym_words": [
+                "triggers left",
+                "trigger left",
+                "triggers left",
+                "trigger left"
+            ]
+        },
+        {
+            "keyword_match": "bumper right",
+            "synonym_words": [
+                "bumper right",
+                "bumper write",
+                "bumper rite",
+                "bumper right"
+            ]
+        },
+        {
+            "keyword_match": "bumper left",
+            "synonym_words": [
+                "bumper left",
+                "bumper left",
+                "bumper left",
+                "bumper left"
+            ]
+        },
+        {
+            "keyword_match": "jump forward",
+            "synonym_words": [
+                "jumped forward",
+                "dump forward",
+                "lump forward",
+                "pump forward"
+            ]
+        },
+        {
+            "keyword_match": "jump backward",
+            "synonym_words": [
+                "jumped backward",
+                "dump backward",
+                "lump backward",
+                "pump backward"
+            ]
+        },
+        {
+            "keyword_match": "dash forward",
+            "synonym_words": [
+                "dash forward",
+                "dash for word",
+                "dash for ward",
+                "dash forward"
+            ]
+        },
+        {
+            "keyword_match": "dash back",
+            "synonym_words": [
+                "dash back",
+                "dash back",
+                "dash back",
+                "dash back"
+            ]
+        }
+    ]
+}
