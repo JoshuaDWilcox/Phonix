@@ -1,17 +1,16 @@
 import { spawn, type ChildProcess } from "child_process";
 import path from "path";
+import { app } from "electron";
+import { isDev } from "../util.js";
 
 let child: ChildProcess | null = null;
 
 export function startControllerBridge() {
   if (child) return; // already running
 
-  const scriptPath = path.join(
-    process.cwd(),
-    "src",
-    "python",
-    "controller_bridge.py"
-  );
+  const scriptPath = isDev()
+    ? path.join(process.cwd(), "src", "python", "controller_bridge.py")
+    : path.join(path.dirname(app.getPath("exe")), "src", "python", "controller_bridge.py");
 
   child = spawn("python3", [scriptPath], {
     stdio: ["pipe", "pipe", "pipe"],

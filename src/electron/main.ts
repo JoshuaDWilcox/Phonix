@@ -58,7 +58,7 @@ const getAllProfileFiles = (dir: string, fileList: string[] = [], baseDir: strin
 ipcMain.handle("get-profiles", async () => {
     const profilesDir = isDev()
         ? path.join(process.cwd(), "src", "profiles")
-        : path.join(app.getAppPath(), "src/profiles");
+        : path.join(path.dirname(app.getPath("exe")), "profiles");
 
     try {
         return getAllProfileFiles(profilesDir);
@@ -71,7 +71,7 @@ ipcMain.handle("get-profiles", async () => {
 ipcMain.handle("setProfilePath", (_, filename: string) => {
     const fullPath = isDev()
         ? path.join(process.cwd(), "src", "profiles", filename)
-        : path.join(app.getAppPath(), "src", "profiles", filename);
+        : path.join(path.dirname(app.getPath("exe")), "profiles", filename);
 
     console.log("[Backend] Profile selected:", fullPath);
 
@@ -84,7 +84,7 @@ ipcMain.handle("setProfilePath", (_, filename: string) => {
 ipcMain.handle("readProfile", async (_, filename: string) => {
     const fullPath = isDev()
         ? path.join(process.cwd(), "src", "profiles", filename)
-        : path.join(app.getAppPath(), "src", "profiles", filename);
+        : path.join(path.dirname(app.getPath("exe")), "profiles", filename);
 
     try {
         const content = fs.readFileSync(fullPath, "utf-8");
@@ -99,7 +99,7 @@ ipcMain.handle("readProfile", async (_, filename: string) => {
 ipcMain.handle("saveProfile", async (_, filename: string, content: any) => {
     const fullPath = isDev()
         ? path.join(process.cwd(), "src", "profiles", filename)
-        : path.join(app.getAppPath(), "src", "profiles", filename);
+        : path.join(path.dirname(app.getPath("exe")), "profiles", filename);
 
     try {
         fs.writeFileSync(fullPath, JSON.stringify(content, null, 4), "utf-8");
@@ -127,7 +127,7 @@ ipcMain.handle("import-profile", async () => {
 
     const profilesDir = isDev()
         ? path.join(process.cwd(), "src", "profiles")
-        : path.join(app.getAppPath(), "src/profiles");
+        : path.join(path.dirname(app.getPath("exe")), "profiles");
 
     const destPath = path.join(profilesDir, filename);
 
@@ -146,16 +146,16 @@ app.on("ready", createWindow);
 // Cleanup function to kill all Python processes
 function cleanupPythonProcesses() {
     console.log("[Main] Cleaning up Python processes...");
-    
+
     // Stop session (which stops both speech and controller bridge)
     stopSession();
-    
+
     // Double-check and force kill if still running
     if (isSpeechProcessRunning()) {
         console.log("[Main] Force killing speech process");
         stopSpeechFromPython();
     }
-    
+
     if (isControllerBridgeRunning()) {
         console.log("[Main] Force killing controller bridge process");
         stopControllerBridge();

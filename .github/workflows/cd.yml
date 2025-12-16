@@ -1,0 +1,91 @@
+name: CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+
+      # Safety check: Run tests before deploying
+      - name: Run tests
+        run: npm test
+        
+      # Build Electron App
+      - name: Build
+        run: npm run dist:win
+      
+      - name: Stage Release Files
+        run: |
+          mkdir staging
+          # Find the .exe in dist folder (electron-builder default)
+          $exePath = Get-ChildItem -Path dist -Filter "*.exe" -Recurse | Select-Object -First 1
+          if ($exePath) {
+            Copy-Item $exePath.FullName -Destination "staging"
+          } else {
+            Write-Error "Executable not found in dist/"
+            exit 1
+          }
+          
+          # Copy src/profiles
+          Copy-Item "src/profiles" -Destination "staging/profiles" -Recurse
+          
+          # Copy src/python structured as src/python
+          New-Item -ItemType Directory -Force -Path "staging/src"
+          Copy-Item "src/python" -Destination "staging/src/python" -Recurse
+          
+          # List staging for verification
+          Get-ChildItem -Path staging -Recurse
+
+      - name: Create Zip Archive
+        run: |
+          Compress-Archive -Path "staging/*" -DestinationPath "Phonix-Release.zip"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: Phonix-Release.zip
+          tag_name: build-${{ github.sha }}
+          name: Build ${{ github.sha }}
+          body: "Automated build from main branch."
+          draft: false
+          prerelease: false
+
+      - name: Prepare Pages Site
+        run: |
+          mkdir public
+          echo "<html><body><h1>Download Phonix</h1><p><a href='https://github.com/${{ github.repository }}/releases/latest/download/Phonix-Release.zip'>Download Latest Windows Release</a></p></body></html>" > public/index.html
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy-pages:
+    needs: build-and-deploy
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
