@@ -47,3 +47,10 @@ The proposed solution is a Python-based desktop application with a Electron fron
 
     Increased accessibility for users who cannot use conventional input devices. 
 
+# References
+
+- RealtimeSTT_faster. (2024). mdv314/RealtimeSTT_faster. GitHub. https://github.com/mdv314/RealtimeSTT_faster
+- RealtimeSTT. (2024). KoljaB/RealtimeSTT. GitHub. https://github.com/KoljaB/RealtimeSTT
+- Radford, A., et al. (2022). Robust Speech Recognition via Large-Scale Weak Supervision. OpenAI Whisper. https://github.com/openai/whisper
+- Electron. (2024). Electron - Build cross-platform desktop apps with JavaScript, HTML, and CSS. https://www.electronjs.org/
+

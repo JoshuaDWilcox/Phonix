@@ -1,0 +1,169 @@
+.profile-editor-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+}
+
+.profile-editor-content {
+    background: linear-gradient(135deg, #0456c2 0%, #00022e 70%, #00011b 100%);
+    background-attachment: fixed;
+    width: 80%;
+    max-width: 800px;
+    height: 80%;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-editor-content h2 {
+    margin-top: 0;
+    color: #8ec3e6;
+    margin-bottom: 1rem;
+}
+
+.editor-form-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: #8ec3e6;
+    font-weight: 500;
+}
+
+.mode-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 4px;
+    flex: 1;
+    max-width: 300px;
+}
+
+.editor-table-container {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 0.5rem;
+}
+
+.editor-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.editor-table th {
+    text-align: left;
+    padding: 0.75rem;
+    color: #8ec3e6;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.editor-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.editor-table input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid transparent;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+.editor-table input:focus {
+    border-color: #8ec3e6;
+    outline: none;
+}
+
+.icon-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.2rem 0.5rem;
+}
+
+.icon-btn:hover {
+    transform: scale(1.1);
+}
+
+.delete-btn {
+    color: #ff6b6b;
+}
+
+.editor-footer {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.secondary-btn {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.save-btn {
+    background: #8ec3e6;
+    color: #000249;
+    font-weight: bold;
+}
+
+.save-btn:hover {
+    background: #7ab0d2;
+}
+
+.cancel-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Sleek Scrollbar */
+.editor-table-container::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.editor-table-container::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    margin: 4px 0;
+}
+
+.editor-table-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    transition: background 0.2s;
+}
+
+.editor-table-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.editor-table-container::-webkit-scrollbar-corner {
+    background: transparent;
+}
