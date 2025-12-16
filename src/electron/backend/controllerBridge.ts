@@ -13,7 +13,7 @@ export function startControllerBridge() {
     "controller_bridge.py"
   );
 
-  child = spawn("python", [scriptPath], {
+  child = spawn("python3", [scriptPath], {
     stdio: ["pipe", "pipe", "pipe"],
   });
 
@@ -48,10 +48,10 @@ export function sendActionToController(action: string) {
 export function stopControllerBridge() {
   if (!child) return;
   console.log("[ControllerBridge] stopping python process");
-  
+
   const processToKill = child;
   child = null;
-  
+
   // Try graceful shutdown first
   try {
     if (!processToKill.killed) {
@@ -60,7 +60,7 @@ export function stopControllerBridge() {
   } catch (err) {
     console.error("[ControllerBridge] Error sending SIGTERM:", err);
   }
-  
+
   // Force kill after a short timeout if it doesn't exit gracefully
   const forceKillTimeout = setTimeout(() => {
     try {
@@ -72,7 +72,7 @@ export function stopControllerBridge() {
       console.error("[ControllerBridge] Error force killing:", err);
     }
   }, 2000);
-  
+
   // Clear timeout if process exits gracefully
   processToKill.once("exit", () => {
     clearTimeout(forceKillTimeout);

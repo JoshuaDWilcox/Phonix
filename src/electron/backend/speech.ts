@@ -20,7 +20,7 @@ export function startSpeechFromPython(window: any) {
         "speech_stub.py" // RealtimeSTT speech-to-text implementation
     );
 
-    child = spawn("python", [scriptPath], {
+    child = spawn("python3", [scriptPath], {
         stdio: ["ignore", "pipe", "pipe"], // we only read its stdout/stderr
     });
 
