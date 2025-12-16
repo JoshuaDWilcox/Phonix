@@ -22,6 +22,13 @@ contextBridge.exposeInMainWorld("api", {
 
     // Import profile dialog
     importProfile: (): Promise<string | null> => ipcRenderer.invoke("import-profile"),
+
+    // Listen for session status updates (e.g. error stops)
+    onSessionStatus: (callback: (data: { isRunning: boolean; error?: string }) => void) => {
+        const subscription = (_: any, data: any) => callback(data);
+        ipcRenderer.on("session-status", subscription);
+        return () => ipcRenderer.removeListener("session-status", subscription);
+    }
 });
 
 console.log("Preload loaded!");

@@ -239,8 +239,7 @@ def main():
             else:
                 print("[controller_bridge] ERROR: Failed to initialize virtual controller after retries", file=sys.stderr, flush=True)
                 print(f"[controller_bridge] Error: {e}", file=sys.stderr, flush=True)
-                # Continue running but log errors when actions are received
-                print("[controller_bridge] Controller emulation disabled - actions will be logged only", flush=True)
+                sys.exit(1)
 
     for line in sys.stdin:
         line = line.strip()

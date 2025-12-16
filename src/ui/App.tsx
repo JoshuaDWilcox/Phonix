@@ -20,6 +20,18 @@ function App() {
 
   useEffect(() => {
     fetchProfiles();
+
+    // Listen for session status updates (e.g. unexpected stops)
+    const unsubscribe = window.api.onSessionStatus((data: { isRunning: boolean; error?: string }) => {
+      setIsRecording(data.isRunning ? 1 : 0);
+      if (data.error) {
+        alert(`Session stopped unexpectedly: ${data.error}`);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const handleProfileSelect = (p: string) => {

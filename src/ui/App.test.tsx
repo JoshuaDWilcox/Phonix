@@ -11,6 +11,7 @@ window.api = {
     importProfile: vi.fn(),
     startSession: vi.fn(),
     stopSession: vi.fn(),
+    onSessionStatus: vi.fn(() => () => { }), // Returns a cleanup function
 } as any;
 
 describe('App', () => {

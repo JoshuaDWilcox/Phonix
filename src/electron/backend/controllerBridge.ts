@@ -31,6 +31,12 @@ export function startControllerBridge() {
   child.on("exit", (code) => {
     console.log("[ControllerBridge] exited with code", code);
     child = null;
+    if (code !== 0 && code !== null) {
+      // If exited with error (e.g. failed retries), notify the app to stop
+      import("./session.js").then(({ stopSession }) => {
+        stopSession(true); // pass true to indicate error occurred
+      });
+    }
   });
 }
 
