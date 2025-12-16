@@ -7,6 +7,10 @@ import sys
 import json
 import time
 import threading
+
+# DEBUG: Print python executable being used
+print(f"[controller_bridge] Python Executable: {sys.executable}", file=sys.stderr, flush=True)
+
 import vgamepad as vg
 
 # Global gamepad instance
@@ -224,15 +228,22 @@ def execute_keymap(keymap: list):
 
 def main():
     """Main function to handle controller commands from stdin."""
-    # Initialize gamepad first - this will fail gracefully if ViGEmBus is not installed
-    try:
-        init_gamepad()
-        print("[controller_bridge] ready", flush=True)
-    except (AssertionError, Exception) as e:
-        print("[controller_bridge] ERROR: Failed to initialize virtual controller", file=sys.stderr, flush=True)
-        print(f"[controller_bridge] Error: {e}", file=sys.stderr, flush=True)
-        # Continue running but log errors when actions are received
-        print("[controller_bridge] Controller emulation disabled - actions will be logged only", flush=True)
+    # Initialize gamepad with retry logic
+    # Sometimes vgamepad fails to initialize on first try, so we retry a few times
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            init_gamepad()
+            print("[controller_bridge] ready", flush=True)
+            break
+        except (AssertionError, Exception) as e:
+            if attempt < max_retries - 1:
+                print(f"[controller_bridge] WARNING: Failed to initialize (attempt {attempt+1}/{max_retries}). Retrying...", file=sys.stderr, flush=True)
+                time.sleep(2)
+            else:
+                print("[controller_bridge] ERROR: Failed to initialize virtual controller after retries", file=sys.stderr, flush=True)
+                print(f"[controller_bridge] Error: {e}", file=sys.stderr, flush=True)
+                sys.exit(1)
 
     for line in sys.stdin:
         line = line.strip()

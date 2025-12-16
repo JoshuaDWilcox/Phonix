@@ -11,6 +11,8 @@ window.api = {
     importProfile: vi.fn(),
     startSession: vi.fn(),
     stopSession: vi.fn(),
+    onSessionStatus: vi.fn(() => () => { }), // Returns a cleanup function
+    onRecorderReady: vi.fn(() => () => { }),
 } as any;
 
 describe('App', () => {

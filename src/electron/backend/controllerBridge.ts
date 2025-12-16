@@ -1,7 +1,7 @@
 import { spawn, type ChildProcess } from "child_process";
 import path from "path";
 import { app } from "electron";
-import { isDev } from "../util.js";
+import { isDev, getPythonCommand } from "../util.js";
 
 let child: ChildProcess | null = null;
 
@@ -12,7 +12,7 @@ export function startControllerBridge() {
     ? path.join(process.cwd(), "src", "python", "controller_bridge.py")
     : path.join(path.dirname(app.getPath("exe")), "src", "python", "controller_bridge.py");
 
-  child = spawn("python3", [scriptPath], {
+  child = spawn(getPythonCommand(), [scriptPath], {
     stdio: ["pipe", "pipe", "pipe"],
   });
 
@@ -31,6 +31,12 @@ export function startControllerBridge() {
   child.on("exit", (code) => {
     console.log("[ControllerBridge] exited with code", code);
     child = null;
+    if (code !== 0 && code !== null) {
+      // If exited with error (e.g. failed retries), notify the app to stop
+      import("./session.js").then(({ stopSession }) => {
+        stopSession(true); // pass true to indicate error occurred
+      });
+    }
   });
 }
 
